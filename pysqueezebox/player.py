@@ -8,8 +8,6 @@ from collections.abc import Sequence
 from datetime import time as dt_time
 from typing import TYPE_CHECKING, Any, Callable, TypedDict
 
-import async_timeout
-
 from .const import REPEAT_MODE, SHUFFLE_MODE, QueryResult
 
 _LOGGER = logging.getLogger(__name__)
@@ -587,7 +585,7 @@ class Player:
         if timeout == 0:
             return True
         try:
-            async with async_timeout.timeout(timeout):
+            async with asyncio.timeout(timeout):
                 await self.create_property_future(prop, lambda x: value == x)
                 return True
         except asyncio.TimeoutError:

@@ -12,7 +12,6 @@ from typing import Any, TypedDict
 from datetime import datetime, UTC
 
 import aiohttp
-import async_timeout
 
 from .const import (
     DEFAULT_PORT,
@@ -321,7 +320,7 @@ class Server:
             raise ValueError("async_query() called with Server.session unset")
 
         try:
-            async with async_timeout.timeout(TIMEOUT):
+            async with asyncio.timeout(TIMEOUT):
                 response = await self.session.post(url, data=query_data, auth=auth)
                 self.http_status = response.status
 
