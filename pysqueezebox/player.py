@@ -531,7 +531,7 @@ class Player:
 
     @property
     def alarm_next(self) -> datetime | None:
-        """Return the time stamp of the next alarm (seconds since the epoch)"""
+        """Return a datetime for the next alarm"""
         if self._status.get("alarm_next", 0) > 0:
             return datetime.fromtimestamp(self._status["alarm_next"], UTC)
         else:
