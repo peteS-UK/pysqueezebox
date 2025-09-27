@@ -805,7 +805,7 @@ class Player:
             return False
 
         try:
-            async with async_timeout.timeout(timeout):
+            async with asyncio.timeout(timeout):
                 future = self.create_property_future("mode", lambda x: x != "play")
                 while not future.done():
                     await _verified_pause_stop(cmd)
