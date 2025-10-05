@@ -60,13 +60,20 @@ class ServerDiscoveryProtocol(asyncio.DatagramProtocol):
         """Test if responder is a Logitech Media Server."""
         _LOGGER.debug("Received LMS discovery response from %s", addr)
         response = _unpack_discovery_response(data, addr)
+        _LOGGER.debug("LMS discovery response: %s", response)
         if response:
             if "host" not in response or "json" not in response:
-                _LOGGER.info(
+                _LOGGER.debug(
                     "LMS discovery response %s does not contain enough information to connect",
                     response,
                 )
-            if callable(self.callback):
+            elif response.get("uuid") == "slimproto":
+                # Discovered server is Home Assistant SlimProto
+                _LOGGER.debug(
+                    "Ignoring Home Assistant SlimProto server discovered at %s",
+                    response.get("host"),
+                )
+            elif callable(self.callback):
                 result = self.callback(
                     Server(
                         self.session,
