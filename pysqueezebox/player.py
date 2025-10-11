@@ -510,17 +510,17 @@ class Player:
         return self._player_prefs.get("alarmsEnabled") == "1"
 
     @property
-    def alarm_upcoming(self) -> str | None:
+    def alarm_upcoming(self) -> bool:
         """Return if an alarm is upcoming within 24h"""
         return self._status.get("alarm_state") == "set"
 
     @property
-    def alarm_active(self) -> str | None:
+    def alarm_active(self) -> bool:
         """Return if an alarm is currently active"""
         return self._status.get("alarm_state") == "active"
 
     @property
-    def alarm_snooze(self) -> str | None:
+    def alarm_snooze(self) -> bool:
         """Return if an alarm is currently in snooze"""
         return self._status.get("alarm_state") == "snooze"
 
@@ -856,7 +856,7 @@ class Player:
             return False
 
         try:
-            async with async_timeout.timeout(timeout):
+            async with asyncio.timeout(timeout):
                 # We have to use a fuzzy match to see if the player got the command.
                 await self.create_property_future(
                     "time", lambda time: time and position <= time <= position + timeout
@@ -1166,7 +1166,7 @@ class Player:
 
         await self.async_update()
         try:
-            async with async_timeout.timeout(timeout):
+            async with asyncio.timeout(timeout):
                 await self.create_property_future(
                     "sync_group", lambda sync_group: other_player_id in sync_group
                 )
